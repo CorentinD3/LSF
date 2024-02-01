@@ -1,0 +1,279 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LSF - Accueil{% endblock %}
+{% block stylesheets %} {{ encore_entry_link_tags('app') }} {% endblock %}
+{% block javascripts %} {{ encore_entry_script_tags('app') }} {% endblock %}
+{% block script %}<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhbt7J1RPvPn8EH0eDO4xDHUBBGlRnaWc&callback=initMap" async defer></script>{% endblock %}
+
+{% block body %}
+    <div class="relative">
+        <div id="carouselExampleCaptions" class="carousel slide relative" data-bs-ride="carousel">
+            <div class="carousel-indicators absolute right-0 bottom-0 left-0 flex justify-center p-0 mb-4">
+                <button
+                        type="button"
+                        data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide-to="0"
+                        class="active"
+                        aria-current="true"
+                        aria-label="Slide 1"
+                ></button>
+                <button
+                        type="button"
+                        data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide-to="1"
+                        aria-label="Slide 2"
+                ></button>
+                <button
+                        type="button"
+                        data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide-to="2"
+                        aria-label="Slide 3"
+                ></button>
+            </div>
+            <div class="carousel-inner relative w-full overflow-hidden">
+                <div class="carousel-item active relative float-left w-full">
+                    <img
+                            src="{{ asset('img/front.webp') | imagine_filter('my_front') }}"
+                            class="block w-full"
+                            alt="..."
+                    />
+                    <div class="carousel-caption hidden md:block absolute text-center">
+                        <h5 class="text-xl"> </h5>
+                        <p> </p>
+                    </div>
+                </div>
+                <div class="carousel-item relative float-left w-full">
+                    <img
+                            src="{{ asset('img/thumbnail_image0.webp') | imagine_filter('my_front') }}"
+                            class="block w-full "
+                            alt="..."
+                    />
+                    <div class="carousel-caption hidden md:block absolute text-center">
+                        <h5 class="text-xl"> </h5>
+                        <p> </p>
+                    </div>
+                </div>
+                <div class="carousel-item relative float-left w-full">
+                    <img
+                            src="{{ asset('img/thumbnail_image2.webp') | imagine_filter('my_front') }}"
+                            class="block w-full"
+                            alt="..."
+                    />
+                    <div class="carousel-caption hidden md:block absolute text-center">
+                        <h5 class="text-xl"> </h5>
+                        <p> </p>
+                    </div>
+                </div>
+            </div>
+            <button
+                    class="carousel-control-prev absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline left-0"
+                    type="button"
+                    data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="prev"
+            >
+                <span class="carousel-control-prev-icon inline-block bg-no-repeat" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+                    class="carousel-control-next absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline right-0"
+                    type="button"
+                    data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="next"
+            >
+                <span class="carousel-control-next-icon inline-block bg-no-repeat" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="bg-stone-800 pt-12 flex flex-row justify-center items-center ">
+        <video controls class="rounded  pb-12 px-6 pt-0 lg:w-3/4 w-full" poster="{{ asset('img/video2.webp') }}">
+            <source  src="{{ asset('media/videoFront.mp4') }}" type="video/mp4">
+            Sorry, your browser doesn't support embedded videos.
+        </video>
+    </div>
+
+    <!-- Nos produits -->
+    <div class=" h-auto   ">
+        <div class="text-center max-w-xl mx-auto pt-12">
+            <h1 class="text-6xl md:text-7xl font-bold mb-5 text-stone-800">Nos fromages</h1>
+            <h3 class="text-xl mb-5 font-light text-stone-800">Découvez nos produits parmi notre liste de plus de 200 fromages</h3>
+            <div class="text-center mb-10">
+                <span class="inline-block w-1 h-1 rounded-full bg-stone-800 ml-1"></span>
+                <span class="inline-block w-3 h-1 rounded-full bg-stone-800 ml-1"></span>
+                <span class="inline-block w-40 h-1 rounded-full bg-stone-800"></span>
+                <span class="inline-block w-3 h-1 rounded-full bg-stone-800 ml-1"></span>
+                <span class="inline-block w-1 h-1 rounded-full bg-stone-800 ml-1"></span>
+            </div>
+        </div>
+
+
+        <!-- CARD -->
+        <div class="text-white">
+            <div class="flex flex-wrap justify-center">
+                {% for fromage in fromages %}
+                    <div class="p-2 ">
+
+                        <div class="max-w-sm rounded overflow-hidden shadow-lg bg-stone-800 pb-0 mb-0" >
+
+                            <img class="w-full h-full" src="{{ asset('uploads/fromages/' ~ fromage.image) | imagine_filter('my_thumb') }}" alt="">
+                            <div class="px-6 py-4">
+                                <div class="font-bold text-white text-xl mb-2 underline text-center">{{ fromage.nom }}</div>
+                                <div class="static">
+                                    <p class="description text-white text-center" id="description-{{ fromage.id }}" style="display: block;">
+                                        {% set text = fromage.description|split(' ') %}
+                                        {% if text|length > 20 %}
+                                            {% for t in text|slice(0, 20) %}
+                                                {{ t }}
+                                            {% endfor %}
+                                            ...
+                                        {% else %}
+                                            {{ text|join(' ') }}
+                                        {% endif %}
+                                        <button class="toggle-button " data-product-id="{{ fromage.id }}">[Lire plus]</button>
+                                    </p>
+                                    <p class="description2 text-white text-center" id="description2-{{ fromage.id }}" style="display: none;">
+                                        {{ fromage.description  }}
+                                        <button class="toggle-button " data-product-id="{{ fromage.id }}">[Lire moins]</button>
+                                    </p>
+                                </div>
+                            </div>
+                            <p class="text-lg text-stone-40 pl-6">Provenance : {{ fromage.Provenance }}</p>
+                            <p class="text-lg text-stone-40 pl-6">Matière grasse : {{ fromage.matieregrasse }} %</p>
+                            <div class="px-6 pt-4 pb-2">
+                                {% for animal in Animaux %}
+                                    {% if fromage in animal.fromages %}
+                                        {% if animal == "Vache" %}
+                                            <span class="inline-block bg-blue-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ animal }}</span>
+                                        {% elseif animal == "Brebis" %}
+                                            <span class="inline-block bg-green-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ animal }}</span>
+                                        {% elseif animal == "Chevre" %}
+                                            <span class="inline-block bg-yellow-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ animal }}</span>
+                                        {% else %}
+                                            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ animal }}</span>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ fromage.lait }}</span>
+                                <br>
+                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ fromage.pate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="w-auto text-white flex justify-center pb-12 pt-12">
+            <a href="{{ path('app_fromages') }}">
+                <button type="submit" class="bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-4 border border-stone-500 hover:border-transparent rounded ">DECOUVREZ TOUS NOS PRODUITS</button>
+            </a>
+        </div>
+        <div class="h-auto bg-stone-800">
+            <div class="text-center max-w-xl mx-auto pt-12">
+                <h1 class="text-6xl md:text-7xl font-bold mb-5 text-white">Nos magasins</h1>
+                <h3 class="text-xl mb-5 font-light text-white">Retrouvez Les saveurs Fromagères à Bergues, rue Lamartine ou bien à Malo, avenue Faidherbe.</h3>
+                <div class="text-center mb-10">
+                    <span class="inline-block w-1 h-1 rounded-full bg-white ml-1"></span>
+                    <span class="inline-block w-3 h-1 rounded-full bg-white ml-1"></span>
+                    <span class="inline-block w-40 h-1 rounded-full bg-white"></span>
+                    <span class="inline-block w-3 h-1 rounded-full bg-white ml-1"></span>
+                    <span class="inline-block w-1 h-1 rounded-full bg-white ml-1"></span>
+                </div>
+            </div>
+            <div class="w-full grid 2xl:grid-cols-2 grid-cols-1 justify-items-center">
+                {{ include('components/frontShopBergues.html.twig') }}
+                {{ include('components/frontShopMalo.html.twig') }}
+                <script>
+
+                    function initMap() {
+                        const myLatLng1 = { lat: 50.96772702837185, lng: 2.432713664287445 };
+                        const myLatLng2 = { lat: 51.047203, lng: 2.393101 };
+
+                        const map1 = new google.maps.Map(document.getElementById("google-map-1"), {
+                            zoom: 17,
+                            center: myLatLng1,
+                            mapTypeId: 'satellite'
+                        });
+
+                        const map2 = new google.maps.Map(document.getElementById("google-map-2"), {
+                            zoom: 18,
+                            center: myLatLng2,
+                            mapTypeId: 'satellite'
+                        });
+
+                        new google.maps.Marker({
+                            position: myLatLng1,
+                            map: map1,
+                            title: "Les saveurs fromagères de Bergues",
+                        });
+
+                        new google.maps.Marker({
+                            position: myLatLng2,
+                            map: map2,
+                            title: "Les saveurs fromagères de Malo",
+                        });
+                    }
+
+                    window.onload = function () {
+                        initMap();
+                    };
+                </script>
+            </div>
+            <div class="w-auto text-white flex justify-center pb-12 pt-12  ">
+                <a href="{{ path('app_contact') }}">
+                    <button type="submit" class="bg-green-700  hover:bg-green-800 text-white font-bold  py-4 px-8 border border-stone-500 hover:border-transparent rounded ">NOUS CONTACTER</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="pb-12 ">
+        {{ include('components/frontReview.html.twig') }}
+    </div>
+    <button id="to-top-button" onclick="goToTop()" title="Go To Top" class="hidden fixed z-50 bottom-10 right-10 p-4 border-0 w-14 h-14 rounded-full shadow-md bg-green-700 hover-bg-green-800 text-white text-lg font-semibold transition-colors duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path d="M12 4l8 8h-6v8h-4v-8H4l8-8z" />
+        </svg>
+        <span class="sr-only">Go to top</span>
+    </button>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var buttons = document.querySelectorAll('.toggle-button');
+            var toTopButton = document.getElementById("to-top-button");
+            buttons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var productId = button.getAttribute('data-product-id');
+                    var description = document.querySelector('#description-' + productId);
+                    var description2 = document.querySelector('#description2-' + productId);
+                    if (description) {
+                        if (description.style.display === 'none' || description.style.display === '') {
+                            description.style.display = 'block';
+                            description2.style.display = 'none';
+                        } else {
+                            description.style.display = 'none';
+                            description2.style.display = 'block';
+                        }
+                    }
+                });
+            });
+            if (toTopButton ) {
+                // On scroll event, toggle button visibility based on scroll position
+                window.onscroll = function() {
+                    if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800 &&  screen.width < 768 ) {
+                        toTopButton.classList.remove("hidden");
+                    } else {
+                        toTopButton.classList.add("hidden");
+                    }
+                };
+                // Function to scroll to the top of the page smoothly
+                window.goToTop = function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                };
+            }
+        });
+
+
+    </script>
+{% endblock %}

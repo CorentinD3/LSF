@@ -1,0 +1,60 @@
+# Ignore les fichiers de configuration locaux
+/.env
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+
+# Ignore les fichiers générés par Composer
+/vendor/
+
+# Ignore les fichiers générés par NPM/Yarn
+/node_modules/
+/build.css
+/package-lock.json
+
+# Ignore les fichiers de cache Symfony
+/var/cache/
+/var/log/
+/var/sessions/
+
+# Ignore les fichiers de build dist
+/dist/
+
+# Ignore les migrations Doctrine
+/migrations/
+
+# Ignore les fichiers de sauvegarde d'IDE
+/.idea/
+
+# Ignore les fichiers de sauvegarde PHPUnit
+/phpunit.xml
+.phpunit.result.cache
+/phpunit.xml.dist
+
+# Ignore les fichiers générés par Symfony
+/var/
+
+# Ignore les fichiers de sauvegarde de tailwind
+/tailwind.config.js
+/postcss.config.js
+
+# Ignore les fichiers de sauvegarde Docker
+/docker-compose.override.yml
+
+# Ignore les fichiers de sauvegarde des tests
+/tests/
+
+# Ignore les fichiers de traduction Symfony
+/translations/
+
+# Ignore les fichiers de sauvegarde de build
+/build/
+
+# Ignore les fichiers de build Webpack Encore
+/public/build/
+
+
+# Ne pas ignorer le fichier .env.example
+!.env.example
+

@@ -1,0 +1,40 @@
+{# tailwindcss Sliding pagination control implementation #}
+{% if pageCount > 1 %}
+    <div class="inline-block">
+        <div class="flex items-baseline flex-row  w-auto rounded-lg">
+            {% if first is defined and current != first %}
+                <span class="bg-stone-800 text-white px-3 py-2 text-lg border-r border-gray-400 font-bold rounded-lg">
+                <a href="{{ path(route, query|merge({(pageParameterName): first})) }}">&lt;&lt;</a>
+            </span>
+            {% endif %}
+
+            {% if previous is defined %}
+                <span class="bg-stone-800 text-white px-3 text-lg py-2 border-r border-gray-400 rounded-lg">
+                <a rel="prev" href="{{ path(route, query|merge({(pageParameterName): previous})) }}">&lt;</a>
+            </span>
+            {% endif %}
+
+            {% for page in pagesInRange %}
+                {% if page != current %}
+                    <span class="bg-stone-800 text-white px-3 py-2 text-lg border-stone-800 rounded-lg">
+                    <a href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a>
+                </span>
+                {% else %}
+                    <span class="bg-transparent text-stone-800 px-3 py-2 text-lg font-bold border border-gray-400 rounded-lg">{{ page }}</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if next is defined %}
+                <span class="bg-stone-800 text-white px-3 py-2 text-lg border-r border-gray-400 rounded-lg">
+                <a rel="next" href="{{ path(route, query|merge({(pageParameterName): next})) }}">&gt;</a>
+            </span>
+            {% endif %}
+
+            {% if last is defined and current != last %}
+                <span class="bg-stone-800 text-white px-3 py-2 text-lg border-gray-400 font-bold rounded-lg">
+                <a href="{{ path(route, query|merge({(pageParameterName): last})) }}">&gt;&gt;</a>
+            </span>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

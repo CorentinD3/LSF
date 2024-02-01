@@ -1,0 +1,280 @@
+{% extends 'base.html.twig' %}
+{% block title %}LSF - Fromages{% endblock %}
+{% block body %}
+
+
+
+ 
+
+    <!-- Nos produits -->
+    <div class=" h-auto">
+     {{ form_start(form) }}
+
+
+
+        <div class="w-full flex pt-6 justify-center md:space-x-6  space-x-2 flex-wrap ">
+
+            <div class="pb-2">
+
+                <details style="user-select: none" class="dropdown text-white container w-50 mx-auto">
+                    <summary class="select-none rounded inline-block px-6 py-2.5 bg-stone-800 text-white font-bold hover:shadow-lg focus:bg-stone-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-stone-800 active:shadow-lg active:text-white transition duration-150 ease-in-out flex items-center whitespace-nowrap  ">TYPE ANIMAL :</summary>
+                    <div class="select-none bg-stone-700 absolute p-4 pt-4 text-base float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 border-none">
+
+                        <p class="">{{ form_row(form.animals) }}</p>
+                    </div>
+                </details>
+
+            </div>
+
+            <div class="pb-2">
+                <details style="user-select: none" class="dropdown text-white container w-50 mx-auto">
+                    <summary class="select-none rounded inline-block px-6 py-2.5 bg-stone-800 text-white font-bold hover:shadow-lg focus:bg-stone-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-stone-800 active:shadow-lg active:text-white transition duration-150 ease-in-out flex items-center whitespace-nowrap  ">TYPE DE LAIT :</summary>
+                    <div class="select-none bg-stone-700 absolute p-4 pt-4 text-base float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 border-none">
+                        <p class="">{{ form_row(form.lait) }}</p>
+                    </div>
+                </details>
+            </div>
+
+            <div class="pb-2">
+                <details style="user-select: none" class="dropdown text-white container w-50 mx-auto">
+                    <summary class="select-none rounded inline-block px-6 py-2.5 bg-stone-800 text-white font-bold hover:shadow-lg focus:bg-stone-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-stone-800 active:shadow-lg active:text-white transition duration-150 ease-in-out flex items-center whitespace-nowrap  ">TYPE DE PÂTE :</summary>
+                    <div class="select-none bg-stone-700 absolute p-4 pt-4 text-base float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 border-none">
+                        <p class="">{{ form_row(form.pates) }}</p>
+                    </div>
+                </details>
+            </div>
+
+
+
+            <div class="flex pb-2  ">
+                <div class="p-1.5 bg-stone-800 rounded-l-lg">
+                    <img alt="search" class="w-8 h-8 bg-stone-800 text-white  " src="{{ asset('img/chercher.png') }}">
+                </div>
+
+            <div class=" " >{{ form_row(form.q) }}</div>
+            </div>
+
+            <div class="flex pb-2">
+            <div class=" flex pt-0 pr-4 lg:pt-0 ">
+            <button type="submit" class="bg-green-700 hover:bg-green-800 text-white font-bold   py-2 px-4 border border-stone-500 hover:border-transparent rounded ">Filtrer</button>
+            </div>
+
+                <div class="flex pt-0 pr-4 lg:pt-0">
+                {% if form.pates.vars.value is not empty or form.lait.vars.value is not empty or form.q.vars.value is not empty or form.animals.vars.value is not empty %}
+                    <a href="{{ path('reset_filter') }}" class="bg-red-700 hover:bg-red-800 text-white font-bold   py-2 px-4 border border-stone-500 hover:border-transparent rounded ">Annuler le filtre</a>
+                {% endif %}
+                </div>
+            </div>
+
+
+            {{ form_end(form) }}
+         {% for message in app.flashes('EmptyFrom') %}
+    
+                <div class="text-sm py-2 px-12 pl-8 font-normal block w-full ">
+                    <div id="alert-border-3" class=" flex p-4 mb-4 border-t-4 border-red-700 text-red-400 bg-stone-800 font-bold" role="alert">
+                        <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        <div class="ml-3 text-sm font-medium">
+                             Votre recherche ne donne aucun résultat. Veuillez réessayer avec d’autres informations.
+                        </div>
+                    </div>
+                </div>    
+          
+                  
+                {% endfor %}
+
+        </div>
+
+
+        <!-- CARD -->
+
+        <div class="text-white">
+
+
+
+
+            <div class=" flex  justify-center">
+                <div class="2xl:columns-5 xl:columns-4 lg:columns-3 md:columns-2 sm:columns-1 gap-0 ">
+
+
+
+
+                    {% for fromage in fromages %}
+                        <div class="p-2">
+                            <div class="max-w-sm rounded overflow-hidden shadow-lg bg-stone-800 pb-0 mb-0">
+                                <img class="w-full h-full" src="{{ asset('uploads/fromages/' ~ fromage.image) | imagine_filter('my_thumb') }}" alt="">
+
+
+                                <div class="px-6 py-4">
+                                    <a href="{{ path('app_fromage/Slug', { 'Slug': fromage.Slug}) }}"><div class="font-bold text-white text-xl mb-2 underline text-center">{{ fromage.nom }}</div></a>
+
+                                    <div class="static">
+                                    <p class="description text-white text-center" id="description-{{ fromage.id }}" style="display: block;">
+
+                                        {% set text = fromage.description|split(' ') %}
+
+                                        {% if text|length > 20 %}
+                                            {% for t in text|slice(0, 20) %}
+                                                {{ t }}
+                                            {% endfor %}
+                                            ...
+                                        {% else %}
+                                            {{ text|join(' ') }}
+                                        {% endif %}
+
+
+                                        <a href="{{ path('app_fromage/Slug', { 'Slug': fromage.Slug}) }}">    <button class="toggle-button " data-product-id="{{ fromage.id }}">[Lire plus]</button></a>
+                                    </p>
+                                        <p class="description2 text-white text-center" id="description2-{{ fromage.id }}" style="display: none;">
+                                            {{ fromage.description  }}
+                                            <button class="toggle-button " data-product-id="{{ fromage.id }}">[Lire moins]</button>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <p class="text-lg text-stone-40 pl-6">Provenance : {{fromage.Provenance}}</p>
+                                <p class="text-lg text-stone-40 pl-6">Matière grasse : {{fromage.matieregrasse}} %</p>
+
+                                <div class="px-6 pt-4 pb-2 ">
+
+                                    {% for Animal in Animaux %}
+                                    {% if fromage in Animal.fromages %}
+                                        {% if Animal == "Vache" %}
+                                            <span class="inline-block bg-blue-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{Animal}}</span>
+                                        {% elseif Animal == "Brebis" %}
+                                            <span class="inline-block bg-green-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{Animal}}</span>
+                                        {% elseif Animal == "Chevre" %}
+                                            <span class="inline-block bg-yellow-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{Animal}}</span>
+                                        {% else %}
+                                            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{Animal}}</span>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{fromage.lait}}</span>
+
+
+                                    <br>
+                                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ fromage.pate }}</span>
+                                    <div class="flex flex-row ">
+                                        {% if fromage.label is not empty %}
+                                        <p class="font-bold text-white py-4 text-center  ">Label(s) :</p>
+                                        {% endif %}
+                                        <div class="flex flex-row pt-2 ">
+
+                                            {% for label in fromage.label %}
+                                                {% if label == "AOP" %}
+                                                    <span title="AOP">
+                                                        <img src="{{ asset('img/AOP.png') | imagine_filter('my_label') }}" alt="AOP">
+                                                    </span>
+                                                {% endif %}
+                                                {% if label == "IGP" %}
+                                                <span title="IGP">
+                                                    <img src="{{ asset('img/IGP.png') | imagine_filter('my_label') }}" alt="IGP">
+                                                </span>
+                                                {% endif %}
+                                                {% if label == "AOC" %}
+                                                <span title="AOC">
+                                                    <img src="{{ asset('img/AOC_blanc.png')| imagine_filter('my_label') }}" alt="AOC">
+                                                </span>
+                                                {% endif %}
+                                                    {% if label == "BIO" %}
+                                                    <span title="BIO">
+                                                        <img src="{{ asset('img/BIO.png')| imagine_filter('my_label') }}" alt="BIO">
+                                                    </span>
+                                                {% endif %}
+                                                {% if label == "Saveurs en Or" %}
+                                                    <span title="Saveurs en Or">
+                                                        <img src="{{ asset('img/SEO.png')| imagine_filter('my_label') }}" alt="Saveurs en Or">
+                                                    </span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                </div>
+
+
+                <button id="to-top-button" onclick="goToTop()" title="Go To Top"
+                        class="hidden fixed z-50 bottom-10 right-10 p-4 border-0 w-14 h-14 rounded-full shadow-md bg-green-700 hover:bg-green-800 text-white text-lg font-semibold transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path d="M12 4l8 8h-6v8h-4v-8H4l8-8z" />
+                    </svg>
+                    <span class="sr-only">Go to top</span>
+                </button>
+
+
+
+
+        </div>
+        <div class="flex justify-center pb-6">
+        {{ knp_pagination_render(fromages) }}
+        </div>
+        </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var buttons = document.querySelectorAll('.toggle-button');
+            var toTopButton = document.getElementById("to-top-button");
+            var dropdowns = document.querySelectorAll('.dropdown');
+
+            buttons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var productId = button.getAttribute('data-product-id');
+                    var description = document.querySelector('#description-' + productId);
+                    var description2 = document.querySelector('#description2-' + productId);
+                });
+
+                // Ajoutez un écouteur de clic à chaque élément "dropdown"
+                dropdowns.forEach(function(dropdown) {
+                    dropdown.addEventListener('click', function(event) {
+                        // Fermez tous les autres dropdowns
+                        dropdowns.forEach(function(otherDropdown) {
+                            if (otherDropdown !== dropdown) {
+                                otherDropdown.removeAttribute('open');
+                            }
+                        });
+                    });
+                });
+
+                // Ajoutez également un écouteur de clic global pour fermer tous les dropdowns
+                document.addEventListener('click', function(event) {
+                    // Vérifiez si le clic n'a pas été effectué à l'intérieur d'un dropdown
+                    if (!event.target.closest('.dropdown')) {
+                        // Fermez tous les dropdowns
+                        dropdowns.forEach(function(dropdown) {
+                            dropdown.removeAttribute('open');
+                        });
+                    }
+                });
+
+                if (toTopButton) {
+                    // On scroll event, toggle button visibility based on scroll position
+                    window.onscroll = function() {
+                        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800 && screen.width < 768) {
+                            toTopButton.classList.remove("hidden");
+                        } else {
+                            toTopButton.classList.add("hidden");
+                        }
+                    };
+
+                    // Function to scroll to the top of the page smoothly
+                    window.goToTop = function() {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    };
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+
+
+

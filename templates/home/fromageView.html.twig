@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+{% block title %}LSF - Fromages{% endblock %}
+{% block stylesheets %} {{ encore_entry_link_tags('app') }} {% endblock %}
+{% block javascripts %} {{ encore_entry_script_tags('app') }} {% endblock %}
+{% block body %}
+
+    <div class="flex flex-col md:flex-row justify-center items-center pt-12 pb-12">
+        <!-- Image grid (occupies half width on mobile and full width on PC) -->
+        <div class="w-full p-6 md:w-1/3 ">
+            <img class="w-full object-cover cursor-pointer shadow-2xl"
+                 src="{{ asset('uploads/fromages/' ~ fromage.image)| imagine_filter('my_view') }}" alt="Flower"
+                 onclick="showModal('{{ asset('uploads/fromages/' ~ fromage.image) }}')" />
+        </div>
+
+        <!-- Details grid (occupies full width on mobile and half width on PC) -->
+         <div class="md:w-1/2 p-4 md:p-0">
+            <div class="rounded-lg p-6">
+                <p class="text-2xl font-extrabold text-center">{{ fromage.nom }}</p>
+                <p class="text-lg text-gray-700 my-4">{{ fromage.description }}</p>
+                <p class="text-lg text-gray-700">Provenance : {{ fromage.provenance }}</p>
+                <p class="pb-4 text-lg text-gray-700">Matière grasse : {{ fromage.matieregrasse }} %</p>
+
+                    {% for Animal in Animaux %}
+                        {% if fromage in Animal.fromages %}
+                            {% if Animal == "Vache" %}
+                                <span class="inline-block bg-blue-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{Animal}}</span>
+                            {% elseif Animal == "Brebis" %}
+                                <span class="inline-block bg-green-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{Animal}}</span>
+                            {% elseif Animal == "Chevre" %}
+                                <span class="inline-block bg-yellow-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{Animal}}</span>
+                            {% else %}
+                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{Animal}}</span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 mb-2">{{fromage.lait}}</span>
+
+
+                    <br>
+                    <span class="inline-block bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 mb-2">{{ fromage.pate }}</span>
+                    <div class="flex flex-row ">
+                        {% if fromage.label is not empty %}
+                            <p class="font-bold text-stone-800 py-4 text-center  ">Label(s) :</p>
+                        {% endif %}
+                      <div class="flex flex-row pt-2 ">
+
+                                            {% for label in fromage.label %}
+                                                {% if label == "AOP" %}
+                                                    <span title="AOP">
+                                                        <img src="{{ asset('img/AOP.png') | imagine_filter('my_label') }}">
+                                                    </span>
+                                                {% endif %}
+                                                {% if label == "IGP" %}
+                                                <span title="IGP">
+                                                    <img src="{{ asset('img/IGP.png') | imagine_filter('my_label') }}">
+                                                </span>
+                                                {% endif %}
+                                                {% if label == "AOC" %}
+                                                <span title="AOC">
+                                                    <img src="{{ asset('img/AOC.png')| imagine_filter('my_label') }}">
+                                                </span>
+                                                {% endif %}
+                                                    {% if label == "BIO" %}
+                                                    <span title="BIO">
+                                                        <img src="{{ asset('img/BIO.png')| imagine_filter('my_label') }}">
+                                                    </span>
+                                                {% endif %}
+                                                {% if label == "Saveurs en Or" %}
+                                                    <span title="Saveurs en Or">
+                                                        <img src="{{ asset('img/SEO.png')| imagine_filter('my_label') }}">
+                                                    </span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="modal" class="hidden fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center">
+
+        <!-- The close button -->
+        <a class="fixed z-90 top-6 right-8 text-white text-5xl font-bold" href="javascript:void(0)"
+           onclick="closeModal()">&times;</a>
+
+        <!-- A big image will be displayed here -->
+        <img id="modal-img" class="max-w-[800px] max-h-[600px] object-cover" />
+    </div>
+
+    <script>
+        // Get the modal by id
+        var modal = document.getElementById("modal");
+
+        // Get the modal image tag
+        var modalImg = document.getElementById("modal-img");
+
+        // this function is called when a small image is clicked
+        function showModal(src) {
+            modal.classList.remove('hidden');
+            modalImg.src = src;
+
+            // Add an event listener to close the modal when clicking outside of the image
+            modal.addEventListener('click', closeModalOutside);
+        }
+
+        // this function is called when the close button is clicked
+        function closeModal() {
+            modal.classList.add('hidden');
+
+            // Remove the event listener when the modal is closed
+            modal.removeEventListener('click', closeModalOutside);
+        }
+
+        // this function is called when clicking outside the image
+        function closeModalOutside(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+
+
+
+ <div class="relative pt-12">
+  <button id="bouton-retour" class="absolute left-10 bottom-10 p-4 border-0 w-14 h-14 rounded-full shadow-md bg-green-700 hover:bg-green-800 text-white text-lg font-semibold transition-colors duration-300">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 transform -rotate-90">
+      <path d="M12 4l-8 8h6v8h4v-8h6l-8-8z" />
+    </svg>
+    <span class="sr-only">Go back</span>
+  </button>
+</div>
+    <script>
+        document.getElementById('bouton-retour').addEventListener('click', function() {
+  history.back();
+});
+    </script>
+
+{% endblock %}
